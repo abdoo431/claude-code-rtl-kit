@@ -101,7 +101,7 @@ claude-code-rtl-kit/
 ├── claude_code_rtl_kit.py       # Main script (CSS, JS and installer in one file)
 ├── test_claude_code_rtl_kit.py  # Unit tests (python -m unittest)
 ├── .github/workflows/tests.yml     # Runs the tests on Windows, macOS and Linux
-├── README.md                       # User-facing documentation (Arabic, English, Hebrew)
+├── README.md                       # User-facing documentation (Arabic, English, Hebrew, Persian)
 ├── LICENSE                         # MIT License
 ├── .gitignore                      # Git configuration
 └── agents.md                       # This file (for AI agents)
@@ -189,7 +189,7 @@ If user needs:
 1. **Solves a Real Problem** - RTL support is genuinely missing from Claude Code
 2. **AI-Ready Architecture** - Clear separation: CSS rules, JS toggle, Python orchestration
 3. **Safe & Reversible** - Automatic backups prevent data loss
-4. **Multi-Language** - Documentation in English, Hebrew, and Arabic
+4. **Multi-Language** - Documentation in English, Arabic, Hebrew and Persian
 5. **Zero Friction** - One-command installation, interactive menu
 
 ---
