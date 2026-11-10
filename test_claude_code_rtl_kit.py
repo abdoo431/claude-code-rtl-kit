@@ -292,6 +292,7 @@ class LanguageTests(unittest.TestCase):
         self.assertEqual(parse([]), (None, None))
         self.assertEqual(parse(["--apply"]), ("--apply", None))
         self.assertEqual(parse(["--apply", "--lang", "fa"]), ("--apply", "fa"))
+        self.assertEqual(parse(["--apply", "--lang", "ur"]), ("--apply", "ur"))
         self.assertEqual(parse(["--lang=he", "--apply"]), ("--apply", "he"))
         for bad in (["--apply", "--lang", "xx"], ["--status", "--lang", "fa"],
                     ["--lang", "fa"], ["--apply", "--lang"], ["--apply", "--remove"]):
@@ -310,14 +311,18 @@ class JsBlockTests(unittest.TestCase):
     def test_every_language_translates_the_same_strings(self):
         js = rtl.RTL_JS_CODE
         body = js[js.index("var STRINGS = {"):js.index("var PERMISSION")]
-        sections = re.split(r"\n        (ar|he|fa): \{", body)[1:]
-        keys = {}
+        sections = re.split(r"\n        (ar|he|fa|ur): \{", body)[1:]
+        keys, tables = {}, {}
         for lang, text in zip(sections[0::2], sections[1::2]):
             keys[lang] = set(re.findall(r"^\s*(['\"])(.+?)\1:\s", text, re.M))
-        self.assertEqual(set(keys), {"ar", "he", "fa"})
-        self.assertEqual(keys["fa"], keys["ar"])
-        self.assertEqual(keys["he"], keys["ar"])
-        self.assertIn("fa: '", js[js.index("var BUTTON_TITLES"):])
+            tables[lang] = re.findall(r"^            (\w+): [\[{]", text, re.M)
+        self.assertEqual(set(keys), {"ar", "he", "fa", "ur"})
+        for lang in ("he", "fa", "ur"):
+            self.assertEqual(keys[lang], keys["ar"], lang)
+            self.assertEqual(tables[lang], tables["ar"], lang)
+        titles = js[js.index("var BUTTON_TITLES"):]
+        for lang in ("ar", "he", "fa", "ur"):
+            self.assertIn(lang + ": '", titles)
 
     @unittest.skipUnless(shutil.which("node"), "node not installed")
     def test_js_block_parses(self):

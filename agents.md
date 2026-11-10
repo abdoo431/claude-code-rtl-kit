@@ -6,7 +6,7 @@
 
 **Project Name:** Claude Code RTL Kit for VS Code  
 **Purpose:** Fixes RTL (Right-to-Left) text direction support for Claude Code in VS Code  
-**Target Users:** Arabic, Persian (Farsi), Hebrew and other RTL language speakers  
+**Target Users:** Arabic, Persian (Farsi), Urdu, Hebrew and other RTL language speakers  
 **Language:** Python 3.6+  
 **License:** MIT, © 2026 Abdullah Hassan  
 
@@ -58,7 +58,7 @@ The tool injects:
 1. **CSS Rules** - RTL styling scoped to the `.ccrk-rtl` class on the root element
 2. **JavaScript Toggle** - Button (⇄) and `Ctrl+Alt+R` shortcut that add/remove the RTL class; the choice is saved in the webview's localStorage
 3. **Smart Selectors** - Preserves LTR for code blocks, technical content, and UI elements
-4. **Menu Translation** - While RTL is on, fixed UI strings (message fork/rewind menu, rewind dialog, Agent map, permission prompt, toggle tooltip) are shown in Arabic, Persian or Hebrew - chosen at install time (menu, or `--apply --lang auto|ar|fa|he|en`, saved in `~/.claude-code-rtl-kit.json`), or by default picked from the language of the user's messages
+4. **Menu Translation** - While RTL is on, fixed UI strings (message fork/rewind menu, rewind dialog, Agent map, permission prompt, input placeholders, past conversations list, slash commands dialog, thinking label, toggle tooltip) are shown in Arabic, Persian, Urdu or Hebrew - chosen at install time (menu, or `--apply --lang auto|ar|fa|ur|he|en`, saved in `~/.claude-code-rtl-kit.json`), or by default picked from the language of the user's messages
 5. **Cross-Platform** - Works on Windows, macOS, Linux
 
 ### Integration Points
@@ -100,6 +100,7 @@ The tool injects:
 claude-code-rtl-kit/
 ├── claude_code_rtl_kit.py       # Main script (CSS, JS and installer in one file)
 ├── test_claude_code_rtl_kit.py  # Unit tests (python -m unittest)
+├── test_browser.py              # Browser tests in Chromium (needs Playwright)
 ├── .github/workflows/tests.yml     # Runs the tests on Windows, macOS and Linux
 ├── README.md                       # User-facing documentation (Arabic, English, Hebrew, Persian)
 ├── LICENSE                         # MIT License
@@ -178,7 +179,7 @@ If user needs:
 
 ### For Autonomous Tools
 - **CLI Integration:** Can be called via `python claude_code_rtl_kit.py`
-- **Automation:** `--apply`, `--remove`, `--status`, `--auto-apply` and `--no-auto-apply` run without the menu (`--apply --lang auto|ar|fa|he|en` also sets the translation language); exit code is 0 on success, 1 on failure, 2 on an unknown flag
+- **Automation:** `--apply`, `--remove`, `--status`, `--auto-apply` and `--no-auto-apply` run without the menu (`--apply --lang auto|ar|fa|ur|he|en` also sets the translation language); exit code is 0 on success, 1 on failure, 2 on an unknown flag
 - **Auto re-apply:** `--auto-apply` schedules `--apply` hourly (Windows Task Scheduler, or cron on macOS/Linux) so RTL returns after Claude Code updates; `--remove` turns it off
 - **Parsing:** Backup mechanism ensures safety for automated deployments
 
@@ -205,7 +206,7 @@ If user needs:
 
 ## Version & Last Updated
 
-- **Latest Version:** 1.0.0 (November 10, 2026)
+- **Latest Version:** 1.1.0 (November 10, 2026)
 - **Last Updated:** November 10, 2026
 - **Recommended AI Agents:** Claude 3.x+, GPT-4+, and other capable LLMs
 

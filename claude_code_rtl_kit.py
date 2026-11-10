@@ -3,7 +3,7 @@
 """
 Claude Code RTL Kit
 
-Right-to-left layout and translated menus (Arabic, Persian, Hebrew) for the
+Right-to-left layout and translated menus (Arabic, Persian, Urdu, Hebrew) for the
 Claude Code extension in VS Code, Cursor, Kiro and Trae.
 
 The extension's webview is patched in two places, each with one marked block
@@ -239,7 +239,7 @@ RTL_JS_CODE = r"""
     var STORAGE_KEY = 'ccrk-rtl-enabled';
     /* Keys earlier versions and earlier RTL patches saved the state under */
     var LEGACY_STORAGE_KEYS = ['ccar-rtl-enabled', 'yby-rtl-enabled'];
-    /* Translation language picked when installing: 'ar', 'fa', 'he', or 'en'
+    /* Translation language picked when installing: 'ar', 'fa', 'ur', 'he', or 'en'
        for no translation. null follows the conversation. Set by the installer. */
     var FIXED_LANG = null;
 
@@ -248,7 +248,7 @@ RTL_JS_CODE = r"""
        ------------------------------------------------------------------ */
 
     /* Applied only while RTL mode is on. The language follows the
-       conversation: whichever of Arabic, Persian or Hebrew the user writes in. A string
+       conversation: whichever of Arabic, Persian, Urdu or Hebrew the user writes in. A string
        missing here, or reworded by an extension update, stays in English.
        Each language has one table per scope (see SCOPES). */
     var STRINGS = {
@@ -298,7 +298,11 @@ RTL_JS_CODE = r"""
                 'Open transcript': 'فتح السجل',
                 'Stop agent': 'إيقاف الوكيل',
                 'Stop': 'إيقاف',
-                'Stopping…': 'جارٍ الإيقاف…'
+                'Stopping…': 'جارٍ الإيقاف…',
+                /* Slash commands dialog */
+                'Slash commands': 'أوامر الشرطة المائلة',
+                'No matching commands.': 'لا توجد أوامر مطابقة.',
+                'No slash commands available.': 'لا توجد أوامر متاحة.'
             },
             /* "Do you want to proceed with <tool>?" */
             permHeader: {
@@ -373,7 +377,42 @@ RTL_JS_CODE = r"""
             permDesc: {
                 'Details': 'التفاصيل',
                 'Scroll to the end of the message before approving it.': 'مرّر إلى نهاية الرسالة قبل الموافقة عليها.'
-            }
+            },
+            /* The Past conversations list */
+            history: {
+                'Sessions': 'الجلسات',
+                'Archived sessions': 'الجلسات المؤرشفة',
+                'Loading sessions…': 'جارٍ تحميل الجلسات…',
+                'No sessions yet': 'لا توجد جلسات بعد',
+                'No sessions found': 'لم يُعثر على جلسات',
+                'No web sessions yet': 'لا توجد جلسات ويب بعد',
+                'Start one at claude.ai/code': 'ابدأ واحدة على claude.ai/code',
+                'Remote server is not connected': 'الخادم البعيد غير متصل',
+                'Reconnect': 'إعادة الاتصال',
+                'Connecting…': 'جارٍ الاتصال…',
+                'Ungrouped': 'بدون مجموعة',
+                'New group': 'مجموعة جديدة',
+                'Unarchive session': 'إلغاء أرشفة الجلسة'
+            },
+            /* Placeholders of the message box and other inputs */
+            placeholders: {
+                'Queue another message…': 'أضف رسالة أخرى إلى قائمة الانتظار…',
+                'Ask Claude to edit…': 'اطلب من Claude التعديل…',
+                'Search sessions…': 'ابحث في الجلسات…',
+                'Filter commands…': 'تصفية الأوامر…',
+                'Type your answer…': 'اكتب إجابتك…',
+                'Tell Claude what to do instead': 'أخبر Claude بما يفعله بدلًا من ذلك'
+            },
+            placeholderPatterns: [
+                [/^(.+) to attach selected text$/, '$1 لإرفاق النص المحدد'],
+                [/^(.+) to focus or unfocus Claude$/, '$1 للتركيز على Claude أو الخروج منه']
+            ],
+            /* "Thinking...", "Thought for 12s" */
+            thinking: [
+                [/^Thinking\.\.\.$/, 'يفكّر...'],
+                [/^Thinking$/, 'تفكير'],
+                [/^Thought for (\d+)s$/, 'فكّر لمدة $1 ث']
+            ]
         },
         he: {
             ui: {
@@ -416,7 +455,10 @@ RTL_JS_CODE = r"""
                 'Open transcript': 'פתיחת התמליל',
                 'Stop agent': 'עצירת הסוכן',
                 'Stop': 'עצירה',
-                'Stopping…': 'עוצר…'
+                'Stopping…': 'עוצר…',
+                'Slash commands': 'פקודות סלאש',
+                'No matching commands.': 'אין פקודות תואמות.',
+                'No slash commands available.': 'אין פקודות זמינות.'
             },
             permHeader: {
                 'Do you want to proceed with ': 'להמשיך עם ',
@@ -482,7 +524,39 @@ RTL_JS_CODE = r"""
             permDesc: {
                 'Details': 'פרטים',
                 'Scroll to the end of the message before approving it.': 'גללו עד סוף ההודעה לפני שתאשרו אותה.'
-            }
+            },
+            history: {
+                'Sessions': 'סשנים',
+                'Archived sessions': 'סשנים בארכיון',
+                'Loading sessions…': 'טוען סשנים…',
+                'No sessions yet': 'אין עדיין סשנים',
+                'No sessions found': 'לא נמצאו סשנים',
+                'No web sessions yet': 'אין עדיין סשנים באינטרנט',
+                'Start one at claude.ai/code': 'התחילו אחד ב-claude.ai/code',
+                'Remote server is not connected': 'השרת המרוחק אינו מחובר',
+                'Reconnect': 'התחברות מחדש',
+                'Connecting…': 'מתחבר…',
+                'Ungrouped': 'ללא קבוצה',
+                'New group': 'קבוצה חדשה',
+                'Unarchive session': 'הוצאת הסשן מהארכיון'
+            },
+            placeholders: {
+                'Queue another message…': 'הוסיפו הודעה נוספת לתור…',
+                'Ask Claude to edit…': 'בקשו מ-Claude לערוך…',
+                'Search sessions…': 'חיפוש סשנים…',
+                'Filter commands…': 'סינון פקודות…',
+                'Type your answer…': 'הקלידו את תשובתכם…',
+                'Tell Claude what to do instead': 'כתבו ל-Claude מה לעשות במקום'
+            },
+            placeholderPatterns: [
+                [/^(.+) to attach selected text$/, '$1 לצירוף הטקסט המסומן'],
+                [/^(.+) to focus or unfocus Claude$/, '$1 למיקוד או ליציאה מהמיקוד ב-Claude']
+            ],
+            thinking: [
+                [/^Thinking\.\.\.$/, 'חושב...'],
+                [/^Thinking$/, 'חשיבה'],
+                [/^Thought for (\d+)s$/, 'חשב $1 שניות']
+            ]
         },
         fa: {
             ui: {
@@ -525,7 +599,10 @@ RTL_JS_CODE = r"""
                 'Open transcript': 'باز کردن رونوشت',
                 'Stop agent': 'توقف عامل',
                 'Stop': 'توقف',
-                'Stopping…': 'در حال توقف…'
+                'Stopping…': 'در حال توقف…',
+                'Slash commands': 'فرمان‌های اسلش',
+                'No matching commands.': 'فرمان منطبقی پیدا نشد.',
+                'No slash commands available.': 'فرمانی در دسترس نیست.'
             },
             permHeader: {
                 'Do you want to proceed with ': 'ادامه با ',
@@ -592,7 +669,183 @@ RTL_JS_CODE = r"""
             permDesc: {
                 'Details': 'جزئیات',
                 'Scroll to the end of the message before approving it.': 'پیش از تأیید، تا انتهای پیام پایین بروید.'
-            }
+            },
+            history: {
+                'Sessions': 'نشست‌ها',
+                'Archived sessions': 'نشست‌های بایگانی‌شده',
+                'Loading sessions…': 'در حال بارگذاری نشست‌ها…',
+                'No sessions yet': 'هنوز نشستی وجود ندارد',
+                'No sessions found': 'نشستی پیدا نشد',
+                'No web sessions yet': 'هنوز نشست وبی وجود ندارد',
+                'Start one at claude.ai/code': 'یکی را در claude.ai/code شروع کنید',
+                'Remote server is not connected': 'سرور راه دور متصل نیست',
+                'Reconnect': 'اتصال دوباره',
+                'Connecting…': 'در حال اتصال…',
+                'Ungrouped': 'بدون گروه',
+                'New group': 'گروه جدید',
+                'Unarchive session': 'خارج کردن نشست از بایگانی'
+            },
+            placeholders: {
+                'Queue another message…': 'پیام دیگری به صف اضافه کنید…',
+                'Ask Claude to edit…': 'از Claude بخواهید ویرایش کند…',
+                'Search sessions…': 'جست‌وجوی نشست‌ها…',
+                'Filter commands…': 'فیلتر فرمان‌ها…',
+                'Type your answer…': 'پاسخ خود را بنویسید…',
+                'Tell Claude what to do instead': 'به Claude بگویید به‌جای آن چه کند'
+            },
+            placeholderPatterns: [
+                [/^(.+) to attach selected text$/, '$1 برای پیوست متن انتخاب‌شده'],
+                [/^(.+) to focus or unfocus Claude$/, '$1 برای فوکوس روی Claude یا خروج از آن']
+            ],
+            thinking: [
+                [/^Thinking\.\.\.$/, 'در حال فکر کردن...'],
+                [/^Thinking$/, 'فکر کردن'],
+                [/^Thought for (\d+)s$/, '$1 ثانیه فکر کرد']
+            ]
+        },
+        ur: {
+            ui: {
+                'Fork conversation from here': 'یہاں سے گفتگو کی شاخ بنائیں',
+                'Rewind code to here': 'کوڈ کو یہاں تک واپس لے جائیں',
+                'Fork conversation and rewind code': 'گفتگو کی شاخ بنائیں اور کوڈ واپس لے جائیں',
+                'Rewind': 'واپسی',
+                'Rewind code': 'کوڈ کی واپسی',
+                'Fork and rewind': 'شاخ اور واپسی',
+                'Restore': 'بحال کریں',
+                'Continue': 'جاری رکھیں',
+                'Never mind': 'منسوخ کریں',
+                'A new forked conversation will be created after rewinding.': 'واپسی کے بعد گفتگو کی ایک نئی شاخ بنائی جائے گی۔',
+                'Checking code changes…': 'کوڈ کی تبدیلیاں جانچی جا رہی ہیں…',
+                'Restored files go back whole, losing later changes by anyone. Bash changes to other files are not undone.': 'بحال کی گئی فائلیں پوری کی پوری واپس آتی ہیں، اور ان پر بعد میں کسی کی بھی کی گئی تبدیلیاں ضائع ہو جاتی ہیں۔ دوسری فائلوں پر Bash کی تبدیلیاں واپس نہیں ہوتیں۔',
+                'Restore code and conversation': 'کوڈ اور گفتگو بحال کریں',
+                'Restore conversation': 'گفتگو بحال کریں',
+                'Restore code': 'کوڈ بحال کریں',
+                'The conversation will be forked.': 'گفتگو کی شاخ بنائی جائے گی۔',
+                'The conversation will be forked. The code will be unchanged.': 'گفتگو کی شاخ بنائی جائے گی اور کوڈ تبدیل نہیں ہوگا۔',
+                'The conversation will be unchanged.': 'گفتگو تبدیل نہیں ہوگی۔',
+                'The code ': 'کوڈ ',
+                'has not changed': 'تبدیل نہیں ہوا',
+                ', so no code will be restored.': '، اس لیے کوئی کوڈ بحال نہیں کیا جائے گا۔',
+                'Agent map': 'ایجنٹ نقشہ',
+                'This session': 'یہ سیشن',
+                'Yes': 'ہاں',
+                'No': 'نہیں',
+                "Yes, and don't ask again": 'ہاں، اور دوبارہ نہ پوچھیں',
+                'Yes, allow all edits this session': 'ہاں، اس سیشن میں تمام ترامیم کی اجازت دیں',
+                'Yes, return to normal mode': 'ہاں، عام موڈ پر واپس جائیں',
+                'Yes, and manually approve edits': 'ہاں، ترامیم کی دستی منظوری کے ساتھ',
+                'Esc to cancel': 'منسوخ کرنے کے لیے Esc دبائیں',
+                'Yes, and use auto mode': 'ہاں، اور خودکار موڈ استعمال کریں',
+                'Yes, and auto-accept': 'ہاں، خودکار منظوری کے ساتھ',
+                'Submit answers': 'جوابات بھیجیں',
+                'No, keep planning': 'نہیں، منصوبہ بندی جاری رکھیں',
+                'Send feedback and keep planning': 'رائے بھیجیں اور منصوبہ بندی جاری رکھیں',
+                'Open transcript': 'ٹرانسکرپٹ کھولیں',
+                'Stop agent': 'ایجنٹ روکیں',
+                'Stop': 'روکیں',
+                'Stopping…': 'روکا جا رہا ہے…',
+                'Slash commands': 'سلیش کمانڈز',
+                'No matching commands.': 'کوئی مماثل کمانڈ نہیں ملی۔',
+                'No slash commands available.': 'کوئی کمانڈ دستیاب نہیں۔'
+            },
+            /* "کیا Bash کے ساتھ آگے بڑھیں؟" - the tool name sits between the two parts */
+            permHeader: {
+                'Do you want to proceed with ': 'کیا ',
+                '?': ' کے ساتھ آگے بڑھیں؟',
+                'Accept this plan?': 'کیا یہ منصوبہ قبول ہے؟',
+                'Continue planning': 'منصوبہ بندی جاری رکھیں',
+                'Allow fetching this url?': 'کیا یہ URL حاصل کرنے کی اجازت ہے؟',
+                'Allow network connection to this host?': 'کیا اس ہوسٹ سے نیٹ ورک کنکشن کی اجازت ہے؟',
+                'Allow searching for this query?': 'کیا اس سوال کی تلاش کی اجازت ہے؟'
+            },
+            summary: {
+                ' line': ' لائن',
+                's': '',
+                'will be removed and': 'حذف ہوں گی اور',
+                'will be added across ': 'شامل ہوں گی، ',
+                ' file': ' فائل میں'
+            },
+            agents: {
+                'agent': 'ایجنٹ',
+                'agents': 'ایجنٹس',
+                ' · click an agent for details': ' · تفصیلات کے لیے کسی ایجنٹ پر کلک کریں',
+                ' background ': ' ',
+                'task': 'بیک گراؤنڈ ٹاسک',
+                'tasks': 'بیک گراؤنڈ ٹاسکس',
+                ' · click a task for details': ' · تفصیلات کے لیے کسی ٹاسک پر کلک کریں'
+            },
+            tokens: [
+                [/ tokens in context$/, ' ٹوکن سیاق میں'],
+                [/ tokens$/, ' ٹوکن']
+            ],
+            detail: {
+                'Working': 'کام جاری ہے',
+                'Waiting for your permission': 'آپ کی اجازت کا انتظار',
+                'Finished': 'مکمل',
+                'Failed': 'ناکام',
+                'Stopped': 'روک دیا گیا',
+                'Now': 'ابھی',
+                'Running': 'چل رہا ہے',
+                'Ended': 'ختم',
+                'Stopping…': 'روکا جا رہا ہے…',
+                'Prompt': 'ہدایت',
+                'Output': 'آؤٹ پٹ',
+                'Tool calls (': 'ٹول کالز (',
+                'No output.': 'کوئی آؤٹ پٹ نہیں۔',
+                'No output yet.': 'ابھی کوئی آؤٹ پٹ نہیں۔',
+                'Output is not available.': 'آؤٹ پٹ دستیاب نہیں۔',
+                'The agent could not be stopped. It may have finished already.': 'ایجنٹ کو روکا نہیں جا سکا۔ ہو سکتا ہے یہ پہلے ہی ختم ہو چکا ہو۔',
+                'The task could not be stopped. It may have finished already.': 'ٹاسک کو روکا نہیں جا سکا۔ ہو سکتا ہے یہ پہلے ہی ختم ہو چکا ہو۔',
+                'Spawned by ': 'بنانے والا: ',
+                'the main agent': 'مرکزی ایجنٹ',
+                'Showing the end of ': 'آؤٹ پٹ کا آخری حصہ دکھایا جا رہا ہے، کل ',
+                ' of output.': '۔'
+            },
+            agentMeta: [
+                [/^Working(?= · |$)/, 'کام جاری ہے'],
+                [/^Waiting for your permission(?= · |$)/, 'آپ کی اجازت کا انتظار'],
+                [/^Finished(?= · |$)/, 'مکمل'],
+                [/^Failed(?= · |$)/, 'ناکام'],
+                [/^Stopped(?= · |$)/, 'روک دیا گیا'],
+                [/ · background$/, ' · بیک گراؤنڈ'],
+                [/ · foreground$/, ' · فور گراؤنڈ']
+            ],
+            permDesc: {
+                'Details': 'تفصیلات',
+                'Scroll to the end of the message before approving it.': 'منظوری سے پہلے پیغام کے آخر تک اسکرول کریں۔'
+            },
+            history: {
+                'Sessions': 'سیشنز',
+                'Archived sessions': 'آرکائیو شدہ سیشنز',
+                'Loading sessions…': 'سیشنز لوڈ ہو رہے ہیں…',
+                'No sessions yet': 'ابھی کوئی سیشن نہیں',
+                'No sessions found': 'کوئی سیشن نہیں ملا',
+                'No web sessions yet': 'ابھی کوئی ویب سیشن نہیں',
+                'Start one at claude.ai/code': 'claude.ai/code پر ایک شروع کریں',
+                'Remote server is not connected': 'ریموٹ سرور سے رابطہ نہیں',
+                'Reconnect': 'دوبارہ جوڑیں',
+                'Connecting…': 'جڑ رہا ہے…',
+                'Ungrouped': 'بغیر گروپ',
+                'New group': 'نیا گروپ',
+                'Unarchive session': 'سیشن آرکائیو سے نکالیں'
+            },
+            placeholders: {
+                'Queue another message…': 'قطار میں ایک اور پیغام شامل کریں…',
+                'Ask Claude to edit…': 'Claude سے ترمیم کرنے کو کہیں…',
+                'Search sessions…': 'سیشنز تلاش کریں…',
+                'Filter commands…': 'کمانڈز فلٹر کریں…',
+                'Type your answer…': 'اپنا جواب لکھیں…',
+                'Tell Claude what to do instead': 'Claude کو بتائیں کہ اس کے بجائے کیا کرے'
+            },
+            placeholderPatterns: [
+                [/^(.+) to attach selected text$/, '$1 منتخب متن منسلک کرنے کے لیے'],
+                [/^(.+) to focus or unfocus Claude$/, '$1 Claude پر فوکس کرنے یا ہٹانے کے لیے']
+            ],
+            thinking: [
+                [/^Thinking\.\.\.$/, 'سوچ رہا ہے...'],
+                [/^Thinking$/, 'سوچ'],
+                [/^Thought for (\d+)s$/, '$1 سیکنڈ سوچا']
+            ]
         }
     };
 
@@ -603,7 +856,8 @@ RTL_JS_CODE = r"""
         en: 'Toggle RTL mode (Ctrl+Alt+R)',
         ar: 'تبديل اتجاه الكتابة (Ctrl+Alt+R)',
         he: 'החלפת כיוון הכתיבה (Ctrl+Alt+R)',
-        fa: 'تغییر جهت نوشتار (Ctrl+Alt+R)'
+        fa: 'تغییر جهت نوشتار (Ctrl+Alt+R)',
+        ur: 'لکھنے کی سمت بدلیں (Ctrl+Alt+R)'
     };
 
     /* The only places text is ever replaced, each with the table it uses.
@@ -631,7 +885,19 @@ RTL_JS_CODE = r"""
         ['[role="dialog"] [class*="cardTitle_"]', 'detail'],
         ['[role="dialog"] [class*="failure_"]', 'detail'],
         ['[role="dialog"] [class*="sectionHeader_"]', 'detail'],
-        ['[role="dialog"] [class*="meta_"]', ['detail', 'agentMeta']]
+        ['[role="dialog"] [class*="meta_"]', ['detail', 'agentMeta']],
+        /* The Past conversations list, the slash commands dialog and the
+           "Thinking" label */
+        ['[role="dialog"][aria-label="Past conversations"]', 'history'],
+        ['[role="dialog"] [class*="emptyState_"]', 'ui'],
+        ['[class*="thinkingSummary_"] > span', 'thinking']
+    ];
+
+    /* Attributes translated the same way: input placeholders. The message
+       box shows its placeholder from data-placeholder. */
+    var ATTR_SCOPES = [
+        ['[data-placeholder]', 'data-placeholder', ['placeholders', 'placeholderPatterns']],
+        ['[placeholder]', 'placeholder', ['placeholders', 'placeholderPatterns']]
     ];
 
     /* Dialogs whose layout follows the translation: right-to-left when
@@ -650,6 +916,8 @@ RTL_JS_CODE = r"""
        Lets a node be translated again, or restored, without losing the
        original - and spots when the extension has written new text into it. */
     var originals = new WeakMap();
+    /* Element -> {attribute: {en, tr}}, the same for translated attributes */
+    var attrOriginals = new WeakMap();
     var touched = false;
 
     /* table is a dictionary of exact strings, or a list of [pattern,
@@ -681,6 +949,18 @@ RTL_JS_CODE = r"""
         return text;
     }
 
+    /* What source becomes: the first table that knows it wins. English when
+       tables is null; null when no table knows it, so a text another scope
+       translated is left alone rather than turned back. */
+    function translate(source, tables) {
+        if (!tables) return source;
+        for (var i = 0; i < tables.length; i++) {
+            var text = lookup(source, tables[i]);
+            if (text !== source) return text;
+        }
+        return null;
+    }
+
     /* Translate el's text with tables, or restore English when tables is null.
        Only nodeValue is changed, so the extension keeps the same text nodes it
        rendered and can still update them. */
@@ -689,25 +969,48 @@ RTL_JS_CODE = r"""
         var node;
         while ((node = walker.nextNode())) {
             var source = sourceOf(node);
-            var text = source;
-            /* The first table that knows the text wins */
-            for (var i = 0; tables && i < tables.length && text === source; i++) {
-                text = lookup(source, tables[i]);
-            }
-            if (text === node.nodeValue) continue;
+            var text = translate(source, tables);
+            if (text === null || text === node.nodeValue) continue;
             originals.set(node, { en: source, tr: text });
             node.nodeValue = text;
             touched = true;
         }
     }
 
-    function localize(lang) {
-        for (var i = 0; i < SCOPES.length; i++) {
-            var tables = lang ? [].concat(SCOPES[i][1]).map(function (name) {
-                return STRINGS[lang][name];
-            }) : null;
-            var els = document.querySelectorAll(SCOPES[i][0]);
-            for (var j = 0; j < els.length; j++) localizeTree(els[j], tables);
+    function localizeAttr(el, attr, tables) {
+        var current = el.getAttribute(attr);
+        if (current === null) return;
+        var seen = attrOriginals.get(el) || {};
+        var source = seen[attr] && current === seen[attr].tr ? seen[attr].en : current;
+        var text = translate(source, tables);
+        if (text === null || text === current) return;
+        seen[attr] = { en: source, tr: text };
+        attrOriginals.set(el, seen);
+        el.setAttribute(attr, text);
+        touched = true;
+    }
+
+    function tablesFor(lang, names) {
+        return lang ? [].concat(names).map(function (name) { return STRINGS[lang][name]; }) : null;
+    }
+
+    /* Translate every scope el is inside of or contains. A full pass passes
+       the whole document. */
+    function localizeAround(el, lang) {
+        var i, j, found;
+        for (i = 0; i < SCOPES.length; i++) {
+            var tables = tablesFor(lang, SCOPES[i][1]);
+            var hit = el.closest(SCOPES[i][0]);
+            if (hit) localizeTree(hit, tables);
+            found = el.querySelectorAll(SCOPES[i][0]);
+            for (j = 0; j < found.length; j++) localizeTree(found[j], tables);
+        }
+        for (i = 0; i < ATTR_SCOPES.length; i++) {
+            var sel = ATTR_SCOPES[i][0], attr = ATTR_SCOPES[i][1];
+            var attrTables = tablesFor(lang, ATTR_SCOPES[i][2]);
+            if (el.matches(sel)) localizeAttr(el, attr, attrTables);
+            found = el.querySelectorAll(sel);
+            for (j = 0; j < found.length; j++) localizeAttr(found[j], attr, attrTables);
         }
     }
 
@@ -765,11 +1068,12 @@ RTL_JS_CODE = r"""
         }
     }
 
-    /* Arabic, Persian or Hebrew, by which script the user's messages use
-       most; falls back to the editor's display language. Persian shares the
-       Arabic script, so it is told apart by the letters only one of the two
-       uses: Persian pe, che, zhe, gaf, keheh and yeh against Arabic
-       teh marbuta, kaf, yeh and alef maksura. Re-checked at most once a second. */
+    /* Arabic, Persian, Urdu or Hebrew, by which script the user's messages
+       use most; falls back to the editor's display language. Persian and Urdu
+       share the Arabic script, so they are told apart by letters only one of
+       them uses: Urdu tteh, ddal, rreh, noon ghunna, do-chashmi heh, heh goal
+       and yeh barree; Persian pe, che, zhe, gaf, keheh and yeh; Arabic teh
+       marbuta, kaf, yeh and alef maksura. Re-checked at most once a second. */
     var langCache = null, langCheckedAt = 0;
     function conversationLang() {
         if (FIXED_LANG) return STRINGS[FIXED_LANG] ? FIXED_LANG : null;
@@ -783,9 +1087,10 @@ RTL_JS_CODE = r"""
         var he = (text.match(/[֐-׿]/g) || []).length;
         if (ar || he) {
             if (ar >= he) {
+                var ur = (text.match(/[ٹڈڑںھہے]/g) || []).length;
                 var fa = (text.match(/[پچژگکی]/g) || []).length;
                 var arOnly = (text.match(/[ةكيى]/g) || []).length;
-                langCache = fa > arOnly ? 'fa' : 'ar';
+                langCache = ur && ur >= arOnly ? 'ur' : fa > arOnly ? 'fa' : 'ar';
             } else {
                 langCache = 'he';
             }
@@ -869,6 +1174,7 @@ RTL_JS_CODE = r"""
         var root = rootEl();
         if (!root) return;
         saveState(root.classList.toggle(ROOT_CLASS));
+        fullPass = true;
         var btn = document.getElementById(BTN_ID);
         if (btn) paint(btn);
         schedule();
@@ -939,15 +1245,55 @@ RTL_JS_CODE = r"""
 
     var restored = restoreState();
 
+    /* Elements the extension changed since the last pass. Only these are
+       checked, so a long conversation costs nothing extra while a reply
+       streams. The whole page is checked at start, on toggle and when the
+       language changes. */
+    var dirty = [];
+    var fullPass = true;
+    var lastLang;
+
+    function touches(el) {
+        return !!(el.closest(WATCHED) || el.querySelector(WATCHED));
+    }
+
     function update() {
         if (!restored) restored = restoreState();
         placeButton();
-        if (!document.querySelector(WATCHED)) return;
+        var batch = dirty;
+        dirty = [];
         var on = isRtlOn();
         if (!on && !touched) return;
         var lang = on ? conversationLang() : null;
-        localize(lang);
-        orient(on, lang);
+        if (lang !== lastLang) {
+            lastLang = lang;
+            fullPass = true;
+        }
+        var full = fullPass;
+        fullPass = false;
+        var roots = full ? [document.documentElement] : Array.from(new Set(batch)).filter(function (el) {
+            return el.isConnected;
+        });
+        for (var i = 0; i < roots.length; i++) localizeAround(roots[i], lang);
+        if (full || roots.some(touches)) orient(on, lang);
+        /* Everything is English again - nothing to watch until RTL is back */
+        if (!on && full) touched = false;
+    }
+
+    function noteChanges(records) {
+        for (var i = 0; i < records.length; i++) {
+            var r = records[i];
+            if (r.type === 'childList') {
+                for (var j = 0; j < r.addedNodes.length; j++) {
+                    var added = r.addedNodes[j];
+                    dirty.push(added.nodeType === 1 ? added : r.target);
+                }
+            } else {
+                var el = r.target.nodeType === 1 ? r.target : r.target.parentElement;
+                if (el) dirty.push(el);
+            }
+        }
+        schedule();
     }
 
     /* React re-renders drop the button and bring back English text, so check
@@ -963,10 +1309,12 @@ RTL_JS_CODE = r"""
         });
     }
 
-    new MutationObserver(schedule).observe(document.body, {
+    new MutationObserver(noteChanges).observe(document.body, {
         childList: true,
         characterData: true,
-        subtree: true
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['placeholder', 'data-placeholder']
     });
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', update);
@@ -1250,6 +1598,7 @@ LANGUAGES = (
     ("auto", "Automatic - follow the language of your messages"),
     ("ar", "Arabic"),
     ("fa", "Persian (Farsi)"),
+    ("ur", "Urdu"),
     ("he", "Hebrew"),
     ("en", "English - no translation"),
 )
@@ -1496,7 +1845,7 @@ def show_menu(auto_on):
 
 FLAGS = ("--apply", "--remove", "--status", "--auto-apply", "--no-auto-apply")
 USAGE = ("Usage: python claude_code_rtl_kit.py "
-         "[--apply [--lang auto|ar|fa|he|en] | --remove | --status | --auto-apply | --no-auto-apply]")
+         "[--apply [--lang auto|ar|fa|ur|he|en] | --remove | --status | --auto-apply | --no-auto-apply]")
 
 
 def _parse_args(args):
