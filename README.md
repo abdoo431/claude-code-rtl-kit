@@ -2,13 +2,13 @@
 
 [![Tests](https://github.com/abdoo431/claude-code-rtl-kit/actions/workflows/tests.yml/badge.svg)](https://github.com/abdoo431/claude-code-rtl-kit/actions/workflows/tests.yml)
 
-<p><b>Right-to-left support and translated menus for the Claude Code extension in VS Code, Cursor, Kiro and Trae, for Arabic, Persian and Hebrew.</b></p>
+<p><b>Right-to-left support and translated menus for the Claude Code extension in VS Code, Cursor, Kiro and Trae, for Arabic, Persian, Urdu and Hebrew.</b></p>
 
-<p dir="rtl"><b>دعم الكتابة من اليمين لليسار وترجمة القوائم في إضافة Claude Code على VS Code و Cursor و Kiro و Trae، للعربية والفارسية والعبرية.</b></p>
+<p dir="rtl"><b>دعم الكتابة من اليمين لليسار وترجمة القوائم في إضافة Claude Code على VS Code و Cursor و Kiro و Trae، للعربية والفارسية والأردية والعبرية.</b></p>
 
-<p dir="rtl"><b>پشتیبانی از نوشتن راست‌به‌چپ و ترجمهٔ منوها در افزونهٔ Claude Code در VS Code، Cursor، Kiro و Trae، برای فارسی، عربی و عبری.</b></p>
+<p dir="rtl"><b>پشتیبانی از نوشتن راست‌به‌چپ و ترجمهٔ منوها در افزونهٔ Claude Code در VS Code، Cursor، Kiro و Trae، برای فارسی، عربی، اردو و عبری.</b></p>
 
-<p dir="rtl"><b>תמיכה בכתיבה מימין לשמאל ותרגום תפריטים בתוסף Claude Code ב-VS Code, Cursor, Kiro ו-Trae, לעברית, ערבית ופרסית.</b></p>
+<p dir="rtl"><b>תמיכה בכתיבה מימין לשמאל ותרגום תפריטים בתוסף Claude Code ב-VS Code, Cursor, Kiro ו-Trae, לעברית, ערבית, פרסית ואורדו.</b></p>
 
 | 🇸🇦 العربية | 🇬🇧 English | 🇮🇱 עברית | 🇮🇷 فارسی |
 |:---:|:---:|:---:|:---:|
@@ -72,7 +72,7 @@ Claude Code RTL Kit - for VS Code, Cursor, Kiro and Trae
 | الخيار | النتيجة |
 |---|---|
 | Automatic | اللغة تتبع رسائلك (الافتراضي) |
-| Arabic / Persian / Hebrew | لغة ثابتة دائمًا |
+| Arabic / Persian / Urdu / Hebrew | لغة ثابتة دائمًا |
 | English | RTL فقط، بدون ترجمة |
 
 يُحفظ اختيارك في `~/.claude-code-rtl-kit.json`، فيُستخدم عند إعادة التطبيق بعد التحديث. ثم أعد تحميل النافذة: `Ctrl+Shift+P` ← `Developer: Reload Window`.
@@ -81,7 +81,7 @@ Claude Code RTL Kit - for VS Code, Cursor, Kiro and Trae
 
 ```bash
 python claude_code_rtl_kit.py --apply          # إضافة RTL لكل التثبيتات (أو تحديث تثبيت قديم)
-python claude_code_rtl_kit.py --apply --lang fa  # مع لغة ثابتة: auto أو ar أو fa أو he أو en
+python claude_code_rtl_kit.py --apply --lang fa  # مع لغة ثابتة: auto أو ar أو fa أو ur أو he أو en
 python claude_code_rtl_kit.py --remove         # إزالة RTL واستعادة الملفات الأصلية
 python claude_code_rtl_kit.py --status         # INSTALLED / OUTDATED / Not installed
 python claude_code_rtl_kit.py --auto-apply     # تشغيل إعادة التطبيق التلقائية
@@ -109,9 +109,13 @@ python claude_code_rtl_kit.py --no-auto-apply  # إيقافها
 | نافذة تأكيد الإرجاع (Rewind) | العنوان والأزرار والملاحظات وعدد الأسطر |
 | نافذة Agent map | ‏Agent map ← خريطة الوكلاء، وعدد الوكلاء والمهام، والتوكنات، وتفاصيل الوكيل: حالته وأقسامها وأزرارها |
 | طلب الإذن | ‏Yes ← نعم، ‏No ← لا، ‏Yes, and don't ask again ← نعم، ولا تسألني مرة أخرى، وكذلك الموافقة على الخطة وأسئلة WebFetch و WebSearch |
+| مربع الكتابة والحقول | ‏Ask Claude to edit… ← اطلب من Claude التعديل… |
+| قائمة المحادثات السابقة | العناوين، والحالات الفارغة، وخانة البحث |
+| نافذة أوامر `/` | العنوان، وخانة التصفية، ورسالة عدم وجود نتائج |
+| عنوان التفكير | ‏Thought for 12s ← فكّر لمدة 12 ث |
 | تلميح زر ⇄ | تبديل اتجاه الكتابة (Ctrl+Alt+R) |
 
-- **اللغة تُختار عند التثبيت**، والافتراضي أن تُستنتج من رسائلك: العربية إذا كنت تكتب بالعربية، والفارسية إذا كنت تكتب بالفارسية، والعبرية إذا كنت تكتب بالعبرية.
+- **اللغة تُختار عند التثبيت**، والافتراضي أن تُستنتج من رسائلك: العربية إذا كنت تكتب بالعربية، والفارسية إذا كنت تكتب بالفارسية، والأردية إذا كنت تكتب بالأردية، والعبرية إذا كنت تكتب بالعبرية. تُميَّز الفارسية والأردية عن العربية بحروفهما الخاصة.
 - النصوص التي يكتبها Claude، مثل أسماء مهام الوكلاء، **لا تُترجم**. وكذلك أزرار الإذن التي تذكر ملفًا أو قاعدة بعينها.
 - إيقاف RTL يعيد النصوص الإنجليزية.
 - إذا غيّر تحديث من Claude Code صياغة نص ما، يظهر بالإنجليزية دون أي عطل.
@@ -183,13 +187,13 @@ cd claude-code-rtl-kit
 python claude_code_rtl_kit.py
 ```
 
-On macOS and Linux use `python3`. The interactive menu offers add, remove, status and automatic re-apply. When adding, it asks for the language of the translated menus: **Automatic** (follows your messages, the default), **Arabic**, **Persian**, **Hebrew**, or **English** (RTL only, no translation). The choice is saved in `~/.claude-code-rtl-kit.json` and reused when RTL is re-applied after an update. After adding, reload the window: `Ctrl+Shift+P` → `Developer: Reload Window`.
+On macOS and Linux use `python3`. The interactive menu offers add, remove, status and automatic re-apply. When adding, it asks for the language of the translated menus: **Automatic** (follows your messages, the default), **Arabic**, **Persian**, **Urdu**, **Hebrew**, or **English** (RTL only, no translation). The choice is saved in `~/.claude-code-rtl-kit.json` and reused when RTL is re-applied after an update. After adding, reload the window: `Ctrl+Shift+P` → `Developer: Reload Window`.
 
 #### Command line
 
 ```bash
 python claude_code_rtl_kit.py --apply          # add RTL to every install (or update an older one)
-python claude_code_rtl_kit.py --apply --lang fa  # with a fixed language: auto, ar, fa, he or en
+python claude_code_rtl_kit.py --apply --lang fa  # with a fixed language: auto, ar, fa, ur, he or en
 python claude_code_rtl_kit.py --remove         # remove RTL and restore the original files
 python claude_code_rtl_kit.py --status         # INSTALLED / OUTDATED / Not installed
 python claude_code_rtl_kit.py --auto-apply     # turn automatic re-apply on
@@ -214,9 +218,13 @@ While RTL is on, the fixed English strings of these parts are translated:
 | Rewind confirmation dialog | title, buttons, notes, line counts |
 | Agent map dialog | title, agent and task counts, token counts, agent details (status, sections, buttons) |
 | Permission prompt | *Yes*, *No*, *Yes, and don't ask again*, the question and the Esc hint, plan approval, WebFetch and WebSearch questions |
+| Message box and inputs | the placeholder text, e.g. *Ask Claude to edit…* |
+| Past conversations list | headings, empty states and the search box |
+| `/` commands dialog | title, filter box and the no-results message |
+| Thinking label | *Thinking...*, *Thought for 12s* |
 | ⇄ button tooltip | in the conversation's language |
 
-- **The language is chosen when installing**; by default it is picked from your messages: Arabic if you write in Arabic, Persian (Farsi) if you write in Persian, Hebrew if you write in Hebrew.
+- **The language is chosen when installing**; by default it is picked from your messages: Arabic if you write in Arabic, Persian (Farsi) if you write in Persian, Urdu if you write in Urdu, Hebrew if you write in Hebrew. Persian and Urdu are told apart from Arabic by the letters only they use.
 - Text written by Claude, such as agent task names, is **never translated**; neither are permission buttons that name a specific file or rule.
 - Turning RTL off brings the English back.
 - If a Claude Code update rewords a string, it simply stays in English.
@@ -246,7 +254,15 @@ Run `python claude_code_rtl_kit.py --remove` (or option `2` in the menu) and rel
 python -m unittest
 ```
 
-Tests run on every push and pull request on Windows, macOS and Linux. The injected CSS and JavaScript live as strings in `claude_code_rtl_kit.py`. Translations are in the `STRINGS` table of the JavaScript block; adding a string is one line.
+Browser tests run the injected CSS and JavaScript in Chromium on a copy of the webview, in every language. They are skipped unless Playwright is installed:
+
+```bash
+pip install playwright
+python -m playwright install chromium
+python -m unittest -v test_browser
+```
+
+All tests run on every push and pull request: the unit tests on Windows, macOS and Linux, the browser tests on Linux. The injected CSS and JavaScript live as strings in `claude_code_rtl_kit.py`. Translations are in the `STRINGS` table of the JavaScript block; adding a string is one line.
 
 ### Contributing
 
@@ -296,13 +312,13 @@ cd claude-code-rtl-kit
 python claude_code_rtl_kit.py
 ```
 
-ב-macOS וב-Linux השתמש ב-`python3`. בתפריט בחר `1` להוספת התמיכה, ובחר את שפת התפריטים המתורגמים: **Automatic** (לפי ההודעות שלך, ברירת המחדל), **Arabic**, **Persian**, **Hebrew**, או **English** (RTL בלבד, בלי תרגום). הבחירה נשמרת ב-`~/.claude-code-rtl-kit.json` ומשמשת גם בהחלה מחדש אחרי עדכון. אחר כך טען את החלון מחדש: `Ctrl+Shift+P` → `Developer: Reload Window`.
+ב-macOS וב-Linux השתמש ב-`python3`. בתפריט בחר `1` להוספת התמיכה, ובחר את שפת התפריטים המתורגמים: **Automatic** (לפי ההודעות שלך, ברירת המחדל), **Arabic**, **Persian**, **Urdu**, **Hebrew**, או **English** (RTL בלבד, בלי תרגום). הבחירה נשמרת ב-`~/.claude-code-rtl-kit.json` ומשמשת גם בהחלה מחדש אחרי עדכון. אחר כך טען את החלון מחדש: `Ctrl+Shift+P` → `Developer: Reload Window`.
 
 #### שורת פקודה
 
 ```bash
 python claude_code_rtl_kit.py --apply          # הוספת RTL לכל ההתקנות (או עדכון התקנה ישנה)
-python claude_code_rtl_kit.py --apply --lang fa  # עם שפה קבועה: auto, ar, fa, he או en
+python claude_code_rtl_kit.py --apply --lang fa  # עם שפה קבועה: auto, ar, fa, ur, he או en
 python claude_code_rtl_kit.py --remove         # הסרת RTL ושחזור הקבצים המקוריים
 python claude_code_rtl_kit.py --status         # INSTALLED / OUTDATED / Not installed
 python claude_code_rtl_kit.py --auto-apply     # הפעלת החלה אוטומטית מחדש
@@ -327,9 +343,13 @@ python claude_code_rtl_kit.py --no-auto-apply  # כיבוי שלה
 | חלון אישור ההחזרה (Rewind) | כותרת, כפתורים, הערות ומספר השורות |
 | חלון Agent map | ‏Agent map ← מפת סוכנים, מספר הסוכנים והמשימות, הטוקנים, ופרטי הסוכן: מצב, מקטעים וכפתורים |
 | בקשת הרשאה | ‏Yes ← כן, ‏No ← לא, ‏Yes, and don't ask again ← כן, ואל תשאל שוב, וגם אישור תוכנית ושאלות WebFetch ו-WebSearch |
+| תיבת הכתיבה ושדות | טקסט ההנחיה, למשל *Ask Claude to edit…* |
+| רשימת השיחות הקודמות | כותרות, מצבים ריקים ותיבת החיפוש |
+| חלון פקודות `/` | הכותרת, תיבת הסינון וההודעה כשאין תוצאות |
+| כותרת החשיבה | *Thinking...*, *Thought for 12s* |
 | הסבר הכפתור ⇄ | בשפת השיחה |
 
-- **השפה נבחרת בהתקנה**; כברירת מחדל היא נקבעת לפי ההודעות שלך: עברית אם אתה כותב בעברית, ערבית אם בערבית, פרסית אם בפרסית.
+- **השפה נבחרת בהתקנה**; כברירת מחדל היא נקבעת לפי ההודעות שלך: עברית אם אתה כותב בעברית, ערבית אם בערבית, פרסית אם בפרסית, אורדו אם באורדו.
 - טקסט ש-Claude כתב, כמו שמות המשימות של הסוכנים, **לא מתורגם**; גם לא כפתורי הרשאה שמזכירים קובץ או כלל מסוים.
 - כיבוי מצב RTL מחזיר את האנגלית.
 - אם עדכון של Claude Code משנה ניסוח של טקסט, הוא פשוט יישאר באנגלית.
@@ -422,7 +442,7 @@ Claude Code RTL Kit - for VS Code, Cursor, Kiro and Trae
 | گزینه | نتیجه |
 |---|---|
 | Automatic | زبان از پیام‌های شما پیروی می‌کند (پیش‌فرض) |
-| Arabic / Persian / Hebrew | همیشه یک زبان ثابت |
+| Arabic / Persian / Urdu / Hebrew | همیشه یک زبان ثابت |
 | English | فقط RTL، بدون ترجمه |
 
 انتخاب شما در `~/.claude-code-rtl-kit.json` ذخیره می‌شود و هنگام اعمال دوباره پس از به‌روزرسانی هم به کار می‌رود. سپس پنجره را دوباره بارگذاری کنید: `Ctrl+Shift+P` ← `Developer: Reload Window`.
@@ -431,7 +451,7 @@ Claude Code RTL Kit - for VS Code, Cursor, Kiro and Trae
 
 ```bash
 python claude_code_rtl_kit.py --apply          # افزودن RTL به همهٔ نصب‌ها (یا به‌روزرسانی نصب قدیمی)
-python claude_code_rtl_kit.py --apply --lang fa  # با زبان ثابت: auto، ar، fa، he یا en
+python claude_code_rtl_kit.py --apply --lang fa  # با زبان ثابت: auto، ar، fa، ur، he یا en
 python claude_code_rtl_kit.py --remove         # حذف RTL و بازگرداندن فایل‌های اصلی
 python claude_code_rtl_kit.py --status         # INSTALLED / OUTDATED / Not installed
 python claude_code_rtl_kit.py --auto-apply     # روشن کردن اعمال دوبارهٔ خودکار
@@ -459,9 +479,13 @@ python claude_code_rtl_kit.py --no-auto-apply  # خاموش کردن آن
 | پنجرهٔ تأیید بازگردانی (Rewind) | عنوان، دکمه‌ها، یادداشت‌ها و تعداد خط‌ها |
 | پنجرهٔ Agent map | ‏Agent map ← نقشهٔ عامل‌ها، تعداد عامل‌ها و وظیفه‌ها، توکن‌ها، و جزئیات عامل: وضعیت، بخش‌ها و دکمه‌ها |
 | درخواست اجازه | ‏Yes ← بله، ‏No ← خیر، ‏Yes, and don't ask again ← بله، و دیگر نپرس؛ و همچنین تأیید برنامه و پرسش‌های WebFetch و WebSearch |
+| کادر نوشتن و فیلدها | ‏Ask Claude to edit… ← از Claude بخواهید ویرایش کند… |
+| فهرست گفتگوهای پیشین | عنوان‌ها، حالت‌های خالی و کادر جست‌وجو |
+| پنجرهٔ فرمان‌های `/` | عنوان، کادر فیلتر و پیام نبودن نتیجه |
+| عنوان فکر کردن | ‏Thought for 12s ← 12 ثانیه فکر کرد |
 | راهنمای دکمهٔ ⇄ | تغییر جهت نوشتار (Ctrl+Alt+R) |
 
-- **زبان هنگام نصب انتخاب می‌شود** و به‌طور پیش‌فرض از پیام‌های شما تشخیص داده می‌شود: فارسی اگر فارسی بنویسید، عربی اگر عربی و عبری اگر عبری. فارسی از روی حروف ویژه‌اش (پ چ ژ گ ک ی) از عربی جدا می‌شود.
+- **زبان هنگام نصب انتخاب می‌شود** و به‌طور پیش‌فرض از پیام‌های شما تشخیص داده می‌شود: فارسی اگر فارسی بنویسید، عربی اگر عربی، اردو اگر اردو و عبری اگر عبری. فارسی و اردو از روی حروف ویژه‌شان از عربی جدا می‌شوند.
 - متن‌هایی که Claude می‌نویسد، مانند نام وظیفه‌های عامل‌ها، **ترجمه نمی‌شوند**؛ دکمه‌های اجازه‌ای هم که نام فایل یا قاعدهٔ مشخصی را می‌آورند همین‌طور.
 - خاموش کردن RTL متن‌های انگلیسی را برمی‌گرداند.
 - اگر یک به‌روزرسانی Claude Code عبارتی را تغییر دهد، آن عبارت بدون هیچ خطایی به انگلیسی نمایش داده می‌شود.

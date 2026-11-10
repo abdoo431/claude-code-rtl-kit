@@ -27,4 +27,17 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       # Node is preinstalled on the runners; the JS syntax test uses it.
+      # The browser tests are skipped here (no Playwright) and run below.
       - run: python -m unittest -v
+
+  # The injected CSS and JS, run in Chromium on a copy of the webview
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install playwright==1.64.1
+      - run: python -m playwright install --with-deps chromium
+      - run: python -m unittest -v test_browser
