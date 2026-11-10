@@ -2,11 +2,13 @@
 
 [![Tests](https://github.com/abdoo431/claude-code-rtl-kit/actions/workflows/tests.yml/badge.svg)](https://github.com/abdoo431/claude-code-rtl-kit/actions/workflows/tests.yml)
 
-**دعم الكتابة من اليمين لليسار وتعريب القوائم في إضافة Claude Code**<br>
-**Right-to-left support and translated menus for the Claude Code extension**<br>
-**תמיכה בכתיבה מימין לשמאל ותרגום תפריטים בתוסף Claude Code**
+<p><b>Right-to-left support and translated menus for the Claude Code extension in VS Code, Cursor, Kiro and Trae, for Arabic, Persian and Hebrew.</b></p>
 
-يعمل في VS Code و Cursor و Kiro و Trae &nbsp;·&nbsp; Works in VS Code, Cursor, Kiro and Trae &nbsp;·&nbsp; עובד ב-VS Code, Cursor, Kiro ו-Trae
+<p dir="rtl"><b>دعم الكتابة من اليمين لليسار وترجمة القوائم في إضافة Claude Code على VS Code و Cursor و Kiro و Trae، للعربية والفارسية والعبرية.</b></p>
+
+<p dir="rtl"><b>پشتیبانی از نوشتن راست‌به‌چپ و ترجمهٔ منوها در افزونهٔ Claude Code در VS Code، Cursor، Kiro و Trae، برای فارسی، عربی و عبری.</b></p>
+
+<p dir="rtl"><b>תמיכה בכתיבה מימין לשמאל ותרגום תפריטים בתוסף Claude Code ב-VS Code, Cursor, Kiro ו-Trae, לעברית, ערבית ופרסית.</b></p>
 
 | 🇸🇦 العربية | 🇬🇧 English | 🇮🇱 עברית |
 |:---:|:---:|:---:|
