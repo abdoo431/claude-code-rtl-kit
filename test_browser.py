@@ -31,6 +31,13 @@ FIXTURE = """
   <div class="userMessageContainer_u1"><div class="userMessage_u1" id="msg">MESSAGE</div></div>
   <div class="timelineMessage_t1"><div class="root_r1" id="reply"><p>Yes</p><p>Restore</p>
     <pre><code>print("No")</code></pre></div></div>
+  <!-- Wide enough that no line wraps, whatever the fonts -->
+  <div class="timelineMessage_t1"><div class="root_r1" id="mixed" style="width:2000px">
+    <ul><li id="plan3"><strong>Plan 3:</strong> اختبارات الـ backend والـ hooks شغالة تاني على برانش
+      <code>feature/canvas-session-api</code>، لأن التشغيل اللي قبل كده وقف مع الجلسة. أول ما تعدّي هفتح PR الكود.</li>
+      <li id="plan6"><strong>Plan 6:</strong> خمس agents شغالين مع بعض، كل واحد في worktree لوحده:
+        <ul><li id="task5">Task 5: محرر الفورم، على Opus.</li><li id="english-item">Run the tests</li></ul></li></ul>
+    <p id="english">Tests pass on Windows.</p></div></div>
   <div class="timelineMessage_t1"><details class="thinking_k1">
     <summary class="thinkingSummary_k1"><span id="thinking">Thought for 12s</span></summary>
     <div class="thinkingContent_k1"><div class="root_r1"><p>thinking text</p></div></div></details></div>
@@ -123,12 +130,17 @@ FORK = {
 SCRIPT = {"ar": "[؀-ۿ]", "fa": "[؀-ۿ]", "ur": "[؀-ۿ]", "he": "[֐-׿]"}
 
 
+# The extension's own rule for replies: each paragraph and list item takes
+# the direction of its first letter.
+CLAUDE_CSS = ".root_r1 :is(p,li,h1,h2,h3,h4,h5,h6,blockquote,td,th){unicode-bidi:plaintext}"
+
+
 def page_html(message="hello", lang="auto", storage=None):
     seed = ""
     if storage:
         seed = "<script>localStorage.setItem(%r, %r);</script>" % storage
     return ("<!doctype html><html><head><meta charset='utf-8'><style>body{width:640px}"
-            + rtl.RTL_CSS_RULES + "</style>" + seed + "</head><body><div id='root'>"
+            + CLAUDE_CSS + rtl.RTL_CSS_RULES + "</style>" + seed + "</head><body><div id='root'>"
             + FIXTURE.replace("MESSAGE", message) + "</div><script>" + rtl.js_block(lang)
             + "</script></body></html>")
 
@@ -262,6 +274,54 @@ class BrowserTests(unittest.TestCase):
         page = self.open(message=MESSAGES["ar"], lang="en", storage=("ccrk-rtl-enabled", "1"))
         self.assertTrue(self.is_on(page))
         self.assertEqual(page.inner_text("#menu .optionText_p1 >> nth=0"), "Fork conversation from here")
+
+    def box(self, page, selector, word=None):
+        """Left and right edge of an element, or of one word inside it."""
+        return page.evaluate("""([sel, word]) => {
+            const el = document.querySelector(sel);
+            if (!word) { const r = el.getBoundingClientRect(); return [r.left, r.right]; }
+            const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+            let n;
+            while ((n = walk.nextNode())) {
+                const i = n.nodeValue.indexOf(word);
+                if (i < 0) continue;
+                const range = document.createRange();
+                range.setStart(n, i);
+                range.setEnd(n, i + word.length);
+                const r = range.getBoundingClientRect();
+                return [r.left, r.right];
+            }
+            throw new Error('not found: ' + word);
+        }""", [selector, word])
+
+    def test_mixed_lines_read_right_to_left(self):
+        page = self.open(message=MESSAGES["ar"], storage=("ccrk-rtl-enabled", "1"))
+        # "Plan 3:" starts the line on the right and the sentence carries on
+        # to the left past the code, instead of jumping to the far left.
+        self.assertGreater(self.box(page, "#plan3 strong")[0], self.box(page, "#plan3", "اختبارات")[1])
+        self.assertGreater(self.box(page, "#plan3", "شغالة")[0], self.box(page, "#plan3 code")[1])
+        self.assertGreater(self.box(page, "#plan3 code")[0], self.box(page, "#plan3", "التشغيل")[1])
+        self.assertGreater(self.box(page, "#plan6 strong")[0], self.box(page, "#plan6", "خمس")[1])
+        self.assertGreater(self.box(page, "#task5", "Task")[0], self.box(page, "#task5", "محرر")[1])
+        # English-only lines stay left to right
+        self.assertLess(self.box(page, "#english-item", "Run")[1], self.box(page, "#english-item", "tests")[0])
+        self.assertLess(self.box(page, "#english", "Tests")[1], self.box(page, "#english", "Windows")[0])
+
+        # A line streamed in later is handled too
+        page.evaluate("""() => {
+            const li = document.createElement('li');
+            li.id = 'late-item';
+            li.textContent = 'Task 9: ';
+            document.querySelector('#task5').parentNode.appendChild(li);
+        }""")
+        self.settle(page)
+        page.evaluate("() => document.getElementById('late-item').append('الكلام يوقف كل التعديلات.')")
+        self.settle(page)
+        self.assertGreater(self.box(page, "#late-item", "Task")[0], self.box(page, "#late-item", "الكلام")[1])
+
+        page.click("#ccrk-rtl-btn")
+        self.settle(page)
+        self.assertEqual(page.evaluate("() => document.querySelectorAll('#mixed [dir]').length"), 0)
 
     def test_layout(self):
         style = """sel => { const s = getComputedStyle(document.querySelector(sel));

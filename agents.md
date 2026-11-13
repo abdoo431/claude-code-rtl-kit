@@ -206,8 +206,8 @@ If user needs:
 
 ## Version & Last Updated
 
-- **Latest Version:** 1.1.0 (November 10, 2026)
-- **Last Updated:** November 10, 2026
+- **Latest Version:** 2.0.0 (November 13, 2026)
+- **Last Updated:** November 13, 2026
 - **Recommended AI Agents:** Claude 3.x+, GPT-4+, and other capable LLMs
 
 ---
