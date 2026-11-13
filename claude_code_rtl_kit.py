@@ -108,6 +108,16 @@ RTL_CSS_RULES = """
     unicode-bidi: plaintext;
 }
 
+/* The extension lays out each paragraph and list item in the direction of
+   its first letter, so an Arabic line that starts with an English word
+   ("Plan 3: ...") came out left to right. The script marks the ones that
+   hold right-to-left letters, and these read right to left whatever they
+   start with. */
+.ccrk-rtl [class*="root_"] [data-ccrk-dir][dir="rtl"] {
+    direction: rtl;
+    unicode-bidi: isolate;
+}
+
 /* Questions Claude asks, their options and your answers */
 .ccrk-rtl :is([class*="questionBlock_"], [class*="questionHeader_"], [class*="answerText_"],
               [class*="optionText_"], [class*="optionContent_"]) {
@@ -1036,6 +1046,33 @@ RTL_JS_CODE = r"""
         touched = true;
     }
 
+    /* Paragraphs and list items in Claude's replies, not in its thinking */
+    var REPLY_BLOCKS = '[class*="root_"]:not([class*="thinkingContent_"] *) ' +
+        ':is(p, li, h1, h2, h3, h4, h5, h6, blockquote, td, th)';
+    var RTL_LETTER = /[֐-ࣿיִ-﷿ﹰ-﻿]/;
+
+    /* Text of a block without nested lists, code or quotes, which are
+       blocks of their own or stay left to right. */
+    function ownText(el) {
+        var text = '';
+        for (var n = el.firstChild; n; n = n.nextSibling) {
+            if (n.nodeType === 3) text += n.nodeValue;
+            else if (n.nodeType === 1 && !n.matches('ul, ol, pre, code, blockquote')) text += ownText(n);
+        }
+        return text;
+    }
+
+    /* Blocks that hold right-to-left letters read right to left, even when
+       they start with an English word; English-only ones are left alone. */
+    function orientText(el) {
+        var blocks = Array.prototype.slice.call(el.querySelectorAll(REPLY_BLOCKS));
+        var outer = el.closest(REPLY_BLOCKS);
+        if (outer) blocks.push(outer);
+        for (var i = 0; i < blocks.length; i++) {
+            setDir(blocks[i], RTL_LETTER.test(ownText(blocks[i])) ? 'rtl' : null);
+        }
+    }
+
     function orient(on, lang) {
         var i;
         if (!on) {
@@ -1274,7 +1311,10 @@ RTL_JS_CODE = r"""
         var roots = full ? [document.documentElement] : Array.from(new Set(batch)).filter(function (el) {
             return el.isConnected;
         });
-        for (var i = 0; i < roots.length; i++) localizeAround(roots[i], lang);
+        for (var i = 0; i < roots.length; i++) {
+            localizeAround(roots[i], lang);
+            if (on) orientText(roots[i]);
+        }
         if (full || roots.some(touches)) orient(on, lang);
         /* Everything is English again - nothing to watch until RTL is back */
         if (!on && full) touched = false;
